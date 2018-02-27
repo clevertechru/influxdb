@@ -909,6 +909,13 @@ func (fs *FileSet) seriesByExprIterator(name []byte, expr influxql.Expr, mf *tsd
 	case *influxql.ParenExpr:
 		return fs.seriesByExprIterator(name, expr.Expr, mf)
 
+	case *influxql.BooleanLiteral:
+		if expr.Val {
+			return fs.MeasurementSeriesIterator(name), nil
+		} else {
+			return nil, nil
+		}
+
 	default:
 		return nil, nil
 	}
